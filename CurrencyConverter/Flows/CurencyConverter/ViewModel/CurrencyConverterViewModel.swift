@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 protocol CurrencyConverterViewModel {
-    var delegate: CurrencyConverterViewModelDelegate? { get set }
-    
     func setupView()
     func didSelectCurrency(at index: IndexPath)
     func didEditBaseCurrencyValue(_ value: String?)

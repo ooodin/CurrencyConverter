@@ -25,10 +25,8 @@ final class CurrencyRatesServiceImpl: CurrencyRatesService {
     func updateRates(сurrencyCode: String?,
                      completion: @escaping (Result<CurrencyRatesModel>) -> Void) {
         let url = urlProvider.makeCurencyRatesUrl(currencyCode: сurrencyCode)
-        let dataTask = urlSession.dataTask(with: url) { (data, responce, error) in
-            if let error = error {
-                completion(.failure(error))
-            } else if let data = data {
+        urlSession.dataTask(with: url) { (data, responce, error) in
+            if let data = data {
                 let decoder = JSONDecoder()
                 do {
                     let currencyRates = try decoder.decode(CurrencyRatesModel.self, from: data)
@@ -36,8 +34,11 @@ final class CurrencyRatesServiceImpl: CurrencyRatesService {
                 } catch {
                     completion(.failure(error))
                 }
+            } else if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.failure(CurrencyRatesServiceError.unknown))
             }
-        }
-        dataTask.resume()
+        }.resume()
     }
 }

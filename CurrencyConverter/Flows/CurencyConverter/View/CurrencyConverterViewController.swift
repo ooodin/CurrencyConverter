@@ -105,6 +105,11 @@ extension CurrencyConverterViewController {
 
 extension CurrencyConverterViewController: CurrencyConverterViewModelDelegate {
     func didUpdateCurrencyRates(_ rates: [CurrencyViewModel]) {
+        if currencyRates.isEmpty {
+            currencyRates = rates
+            tableView.reloadData()
+            return
+        }
         let stagedChangeset = StagedChangeset(source: currencyRates, target: rates)
         
         for changeset in stagedChangeset {
